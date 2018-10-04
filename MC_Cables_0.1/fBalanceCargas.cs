@@ -144,12 +144,16 @@ namespace MC_Cables_0._1
 
                 foreach (DataGridViewRow Fila in dgvCargas.Rows)
                 {
-                    float Corriente = CalcularCorriente(Fila);
+                    if (Fila.Cells["CargaID"] != null)
+                    {
+                        float Corriente = CalcularCorriente(Fila);
 
-                    if (Corriente != 0)
-                        dgvCargas.Rows[Fila.Index].Cells["Corriente"].Value = Corriente;
-                    else
-                        dgvCargas.Rows[Fila.Index].Cells["Corriente"].Value = null;
+                        if (Corriente != 0)
+                            dgvCargas.Rows[Fila.Index].Cells["Corriente"].Value = Corriente;
+                        else
+                            dgvCargas.Rows[Fila.Index].Cells["Corriente"].Value = null;
+                    }
+                    
 
                 }
             }
