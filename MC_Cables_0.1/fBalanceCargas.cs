@@ -144,7 +144,7 @@ namespace MC_Cables_0._1
 
                 foreach (DataGridViewRow Fila in dgvCargas.Rows)
                 {
-                    if (Fila.Cells["CargaID"] != null)
+                    if (Fila.Cells["CargaID"].Value != null)
                     {
                         float Corriente = CalcularCorriente(Fila);
 
@@ -152,6 +152,7 @@ namespace MC_Cables_0._1
                             dgvCargas.Rows[Fila.Index].Cells["Corriente"].Value = Corriente;
                         else
                             dgvCargas.Rows[Fila.Index].Cells["Corriente"].Value = null;
+                            
                     }
                     
 
@@ -173,6 +174,7 @@ namespace MC_Cables_0._1
             dgvCargas.Columns["EquipoID"].Visible = false;
             dgvCargas.Columns["EscenarioID"].Visible = false;
             dgvCargas.Columns["Modificada"].Visible = false;
+            dgvCargas.Columns["UltimaModific"].Visible = false;
 
 
             //Hago solo lectura
@@ -186,6 +188,11 @@ namespace MC_Cables_0._1
             dgvCargas.Columns["Tension"].ReadOnly = true;
             dgvCargas.Columns["Cosfi"].ReadOnly = true;
             dgvCargas.Columns["PotenciaActiva"].ReadOnly = true;
+
+
+            //Decimales
+            dgvCargas.Columns["Corriente"].DefaultCellStyle.Format = "N3";
+            dgvCargas.Columns["PotenciaActiva"].DefaultCellStyle.Format = "N3";
 
             return 0;
         }
@@ -219,10 +226,10 @@ namespace MC_Cables_0._1
                                 k = 1;
                             }
 
-                            float Tension = (float)fila.Cells[IT].Value;
                             float Potencia = (float)fila.Cells[IP].Value;
                             float Cosfi = (float)fila.Cells[IC].Value;
-
+                            float Tension = (float)fila.Cells[IT].Value;
+                            
                             float Corriente = Potencia * 1000 / (Tension * Cosfi * k);
 
                             return Corriente;
