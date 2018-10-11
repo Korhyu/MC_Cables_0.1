@@ -194,6 +194,28 @@ namespace MC_Cables_0._1
             dgvCargas.Columns["Corriente"].DefaultCellStyle.Format = "N3";
             dgvCargas.Columns["PotenciaActiva"].DefaultCellStyle.Format = "N3";
 
+
+
+            //Columnas con Combo Box
+            var nuevaCol = new DataGridViewComboBoxColumn();
+            List<String> Tipos = new List<String>();
+            Tipos.AddRange(new List<String> { "Continua", "Intermitente", "Reserva", "Stan By", "Otro" });
+
+            nuevaCol.HeaderText = "Tipo Operacion";
+            nuevaCol.Name = "Aux";
+            nuevaCol.DataSource = Tipos;
+            dgvCargas.Columns.Add(nuevaCol);
+
+            foreach (DataGridViewRow fila in dgvCargas.Rows)
+            {
+                if (fila.Cells["TipoOperacion"].Value != null)
+                    fila.Cells["Aux"].Value = fila.Cells["TipoOperacion"].Value;
+            }
+
+            dgvCargas.Columns["Aux"].DisplayIndex = dgvCargas.Columns["TipoOperacion"].DisplayIndex;
+            dgvCargas.Columns["TipoOperacion"].Name = "Eliminar";
+            dgvCargas.Columns["Aux"].Name = "TipoOperacion";
+
             return 0;
         }
 
@@ -241,6 +263,17 @@ namespace MC_Cables_0._1
                 else return 0;
             }
             else return 0;
+        }
+
+        private void SincronizarDB ()
+        {
+            foreach (DataGridViewRow Fila in dgvCargas.Rows)
+            {
+                if (Fila.Cells["Modificada"].Value != DBNull.Value)
+                {
+
+                }
+            }
         }
 
     }

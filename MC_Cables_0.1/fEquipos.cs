@@ -145,7 +145,7 @@ namespace MC_Cables_0._1
 
             dgvEquipos.Columns["TipoCB"].DisplayIndex = dgvEquipos.Columns["Tipo"].DisplayIndex;
             dgvEquipos.Columns["Tipo"].Name = "Aux";
-            dgvEquipos.Columns["Aux"].Visible = true;
+            dgvEquipos.Columns["Aux"].Visible = false;
             //dgvEquipos.Columns["Aux"].DisplayIndex = 16;
             //dgvEquipos.Columns.Remove(dgvEquipos.Columns["Tipo"]);
             dgvEquipos.Columns["TipoCB"].Name = "Tipo";
