@@ -72,39 +72,8 @@ namespace MC_Cables_0._1
                     ProyectoID = lectura;
                 }
 
-                //Consigo los datos de la tabla
-                using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
-                {
-                    sda = new MySqlDataAdapter(String.Format("SELECT e.* FROM Proyectos p JOIN Equipos e ON p.ProyectoID = e.ProyectoID WHERE p.NombreProyecto =  '{0}'", NombreProyecto), sqlConnection);
-                    dt = new DataTable();
-                    sda.Fill(dt);
+                RecargarLista();
 
-                    dgvEquipos.DataSource = dt;
-
-                    //Configuracion del DGV
-                    ConfigurarDataGridView();
-
-
-                    //Si estan todos los datos, calculo la corriente
-                    foreach (DataGridViewRow fila in dgvEquipos.Rows)
-                    {
-                        if (fila.Cells["EquipoID"].Value != null)
-                        {
-                            var FilaI = fila.Index;
-                            var ColumnaI = dgvEquipos.Columns.IndexOf(dgvEquipos.Columns["Corriente"]);
-
-                            float Corriente = CalcularCorriente(fila);
-
-                            if (Corriente != 0)
-                                dgvEquipos.Rows[FilaI].Cells[ColumnaI].Value = Corriente;
-                            else
-                                dgvEquipos.Rows[FilaI].Cells[ColumnaI].Value = null;
-                        }
-                    }
-
-                    //Habilito la vision de cambios en la tabla
-                    IndicarCambios = true;
-                }
                 DataGridViewComboBoxColumn dgcb = new DataGridViewComboBoxColumn();
             }
 
@@ -116,7 +85,7 @@ namespace MC_Cables_0._1
             dgvEquipos.Columns.Add("Modificada", "Modificada");
             dgvEquipos.Columns.Add("Corriente", "Corriente");
 
-            dgvEquipos.Columns["EquipoID"].Visible = true;
+            dgvEquipos.Columns["EquipoID"].Visible = false;
             dgvEquipos.Columns["Modificada"].Visible = false;
             dgvEquipos.Columns["ProyectoID"].Visible = false;
 
@@ -160,7 +129,7 @@ namespace MC_Cables_0._1
             int IC = fila.Cells["Cosfi"].ColumnIndex;               //Indice Coseno Fi
             int IF = fila.Cells["CantidadFases"].ColumnIndex;       //Indice Cantidad de Fases
             int II = fila.Cells["Corriente"].ColumnIndex;           //Indice Corriente Activa
-
+            int IR = fila.Cells["Rendimiento"].ColumnIndex;         //Indice Rendimiento
 
             //Verifico que esten todos los datos y realizo el calculo de la corriente
             if (fila.Cells[IT].Value != DBNull.Value)
@@ -172,21 +141,26 @@ namespace MC_Cables_0._1
                         if (fila.Cells[IF].Value != DBNull.Value)
                         {
                             float k;
+                            float Rendimiento;
 
-                            if (Convert.ToInt32(fila.Cells[IF].Value) == 3)
-                            {
-                                k = (float)Math.Sqrt(3);
-                            }
+                            //Consulto si existe el rendimiento de la carga
+                            if (fila.Cells[IR].Value != DBNull.Value)
+                                Rendimiento = (float)fila.Cells[IR].Value / 100;
                             else
-                            {
+                                Rendimiento = 1;
+                            
+                            //Consigo el k de la carga
+                            if (Convert.ToInt32(fila.Cells[IF].Value) == 3)
+                                k = (float)Math.Sqrt(3);
+                            else
                                 k = 1;
-                            }
+
 
                             float Tension = (float)fila.Cells[IT].Value;
                             float Potencia = (float)fila.Cells[IP].Value;
                             float Cosfi = (float)fila.Cells[IC].Value;
 
-                            float Corriente = Potencia * 1000 / (Tension * Cosfi * k);
+                            float Corriente = Potencia * 1000 / (Tension * Cosfi * k * Rendimiento);
 
                             return Corriente;
                         }
@@ -206,6 +180,7 @@ namespace MC_Cables_0._1
             int IC = fila.Cells["Cosfi"].ColumnIndex;               //Indice Coseno Fi
             int IF = fila.Cells["CantidadFases"].ColumnIndex;       //Indice Cantidad de Fases
             int II = fila.Cells["Corriente"].ColumnIndex;           //Indice Corriente Activa
+            int IR = fila.Cells["Rendimiento"].ColumnIndex;         //Indice Rendimiento
 
             //Verifico que esten todos los datos y realizo el calculo de la corriente
             if (fila.Cells[IT].Value != DBNull.Value)
@@ -217,21 +192,26 @@ namespace MC_Cables_0._1
                         if (fila.Cells[IF].Value != DBNull.Value)
                         {
                             float k;
+                            float Rendimiento;
+                            float Corriente;
 
-                            if (Convert.ToInt32(fila.Cells[IF].Value) == 3)
-                            {
-                                k = (float)Math.Sqrt(3);
-                            }
+                            //Consulto si existe el rendimiento de la carga
+                            if (fila.Cells[IR].Value != DBNull.Value)
+                                Rendimiento = (float)fila.Cells[IR].Value / 100;
                             else
-                            {
+                                Rendimiento = 1;
+
+                            //Consigo el k de la carga
+                            if (Convert.ToInt32(fila.Cells[IF].Value) == 3)
+                                k = (float)Math.Sqrt(3);
+                            else
                                 k = 1;
-                            }
 
                             float Tension = (float)fila.Cells[IT].Value;
-                            float Corriente = (float)fila.Cells[II].Value;
+                            float.TryParse(fila.Cells[II].Value.ToString(),out Corriente);
                             float Cosfi = (float)fila.Cells[IC].Value;
 
-                            float Potencia = Corriente * Tension * Cosfi * k / 1000;
+                            float Potencia = Corriente * Tension * Cosfi * k * Rendimiento / 1000;
 
                             return Potencia;
                         }
@@ -248,26 +228,30 @@ namespace MC_Cables_0._1
         {
             String aux;
 
-            using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
+            try
             {
-                MySqlCommand sqlCmd = new MySqlCommand("", sqlConnection);
-                sqlConnection.Open();
-
-                foreach (DataGridViewRow fila in dgvEquipos.Rows)
+                using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
                 {
-                    if (fila.Cells["Modificada"].Value != null)
+                    MySqlCommand sqlCmd = new MySqlCommand("", sqlConnection);
+                    sqlConnection.Open();
+
+                    foreach (DataGridViewRow fila in dgvEquipos.Rows)
                     {
-                        aux = ArmadoQueryEquipo(fila);
-                        if(!String.IsNullOrEmpty(aux))
+                        if (fila.Cells["Modificada"].Value != null)
                         {
-                            sqlCmd.CommandText = aux;
-                            sqlCmd.ExecuteNonQuery();
+                            aux = ArmadoQueryEquipo(fila);
+                            if (!String.IsNullOrEmpty(aux))
+                            {
+                                sqlCmd.CommandText = aux;
+                                sqlCmd.ExecuteNonQuery();
+                            }
                         }
+                        //MessageBox.Show(fila.Cells["TAG"].Value.ToString());
                     }
-                    //MessageBox.Show(fila.Cells["TAG"].Value.ToString());
+                    sqlConnection.Close();
                 }
-                sqlConnection.Close();
             }
+            catch (Exception exc) { MessageBox.Show(exc.Message); }
         }
 
         private void EnviarQuery(String Query)
@@ -283,13 +267,50 @@ namespace MC_Cables_0._1
 
         private void btReload_Click(object sender, EventArgs e)
         {
+            RecargarLista();
+        }
+
+        private void recargarDatosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RecargarLista();
+        }
+
+        private void RecargarLista()
+        {
+            //Consigo los datos de la tabla
             using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
             {
-                sda = new MySqlDataAdapter(String.Format("SELECT * FROM equipos INNER JOIN Proyectos ON Proyectos.NombreProyecto = '{0}'", NombreProyecto), sqlConnection);
+                sda = new MySqlDataAdapter(String.Format("SELECT e.* FROM Proyectos p JOIN Equipos e ON p.ProyectoID = e.ProyectoID WHERE p.NombreProyecto =  '{0}'", NombreProyecto), sqlConnection);
                 dt = new DataTable();
                 sda.Fill(dt);
+
                 dgvEquipos.DataSource = dt;
-                dgvEquipos.Columns["EquipoID"].Visible = false;
+
+                //Desabilito la vision de cambios en la tabla
+                IndicarCambios = false;
+
+                //Configuracion del DGV
+                ConfigurarDataGridView();
+
+                //Si estan todos los datos, calculo la corriente
+                foreach (DataGridViewRow fila in dgvEquipos.Rows)
+                {
+                    if (fila.Cells["EquipoID"].Value != null)
+                    {
+                        var FilaI = fila.Index;
+                        var ColumnaI = dgvEquipos.Columns.IndexOf(dgvEquipos.Columns["Corriente"]);
+
+                        float Corriente = CalcularCorriente(fila);
+
+                        if (Corriente != 0)
+                            dgvEquipos.Rows[FilaI].Cells[ColumnaI].Value = Corriente;
+                        else
+                            dgvEquipos.Rows[FilaI].Cells[ColumnaI].Value = null;
+                    }
+                }
+
+                //Habilito la vision de cambios en la tabla
+                IndicarCambios = true;
             }
         }
 
@@ -317,73 +338,29 @@ namespace MC_Cables_0._1
                     int II = dgvEquipos.Columns.IndexOf(dgvEquipos.Columns["Corriente"]);           //Indice Corriente Activa
                     int IY = dgvEquipos.Columns.IndexOf(dgvEquipos.Columns["Tipo"]);                //Indice Tipo
                     int IA = dgvEquipos.Columns.IndexOf(dgvEquipos.Columns["Aux"]);                 //Indice Auxiliar
+                    int IR = dgvEquipos.Columns.IndexOf(dgvEquipos.Columns["Rendimiento"]);         //Indice Rendimiento
 
                     //Si se modifico la tension, la potencia o el coseno fi, recalculo la corriente
-                    if (dgvEquipos.Rows[IndiceF].Cells[IT].Value != DBNull.Value)
+                    if (IndiceC == IT || IndiceC == IP || IndiceC == IC || IndiceC == IF || IndiceC == IR)
                     {
-                        if (dgvEquipos.Rows[IndiceF].Cells[IF].Value != DBNull.Value)
-                        {
-                            if (dgvEquipos.Rows[IndiceF].Cells[IC].Value != DBNull.Value)
-                            {
-                                if (dgvEquipos.Rows[IndiceF].Cells[IP].Value != DBNull.Value)
-                                {
-                                    if (IndiceC == IT || IndiceC == IP || IndiceC == IC || IndiceC == IF)
-                                    {
-                                        float k;
-
-                                        if (Convert.ToInt32(dgvEquipos.Rows[IndiceF].Cells[IF].Value) == 3)
-                                            k = (float)Math.Sqrt(3);
-                                        else
-                                            k = 1;
-
-                                        float Tension = (float)dgvEquipos.Rows[IndiceF].Cells[IT].Value;
-                                        float Potencia = (float)dgvEquipos.Rows[IndiceF].Cells[IP].Value;
-                                        float Cosfi = (float)dgvEquipos.Rows[IndiceF].Cells[IC].Value;
-
-                                        float Corriente = Potencia * 1000 / (Tension * Cosfi * k);
-
-                                        dgvEquipos.Rows[IndiceF].Cells[II].Style.BackColor = Color.Yellow;
-                                        dgvEquipos.Rows[IndiceF].Cells[II].Value = Corriente;
-                                    }
-                                }
-                                else //Si se modifico la corriente, recalculo la potencia
-                                {
-                                    if (IndiceC == II)
-                                    {
-                                        float k;
-
-                                        if (Convert.ToInt32(dgvEquipos.Rows[IndiceF].Cells[IF].Value) == 3)
-                                        {
-                                            k = (float)Math.Sqrt(3);
-                                        }
-                                        else
-                                        {
-                                            k = 1;
-                                        }
-
-                                        float Tension = (float)dgvEquipos.Rows[IndiceF].Cells[IT].Value;
-                                        float Cosfi = (float)dgvEquipos.Rows[IndiceF].Cells[IC].Value;
-                                        float Corriente;
-                                        float.TryParse(dgvEquipos.Rows[IndiceF].Cells[II].Value.ToString(), out Corriente);
-
-                                        float Potencia = Corriente * (Tension * Cosfi * k) / 1000;
-
-                                        dgvEquipos.Rows[IndiceF].Cells[IP].Style.BackColor = Color.Yellow;
-                                        dgvEquipos.Rows[IndiceF].Cells[IP].Value = Potencia;
-                                    }
-                                }
-                            }
-                        }
+                        var Corriente = CalcularCorriente(dgvEquipos.Rows[IndiceF]);
+                        dgvEquipos.Rows[IndiceF].Cells[II].Style.BackColor = Color.Yellow;
+                        dgvEquipos.Rows[IndiceF].Cells[II].Value = Corriente;
                     }
 
+                    //Si se modifico la Corriente, recalculo la potencia
+                    if (IndiceC == II)
+                    {
+                        var Potencia = CalcularPotencia(dgvEquipos.Rows[IndiceF]);
+                        dgvEquipos.Rows[IndiceF].Cells[IP].Style.BackColor = Color.Yellow;
+                        dgvEquipos.Rows[IndiceF].Cells[IP].Value = Potencia;
+                    }
 
                     //Si se modifico el tipo, actualizo la columna Aux
                     if (IndiceC == IY)
                     {
                         dgvEquipos.Rows[IndiceF].Cells[IA].Value = dgvEquipos.Rows[IndiceF].Cells[IY].Value;
                     }
-
-
                 }
                 ModificandoCelda = false;
             }
@@ -435,6 +412,7 @@ namespace MC_Cables_0._1
                 }
             }
             CambioCelda = false;
+            //Close();
         }
 
         public String ArmadoQueryEquipo(DataGridViewRow fila)
@@ -444,7 +422,7 @@ namespace MC_Cables_0._1
             //Verifico si es una fila nueva o existente
             if (fila.Cells["EquipoID"].Value.ToString() == "")
             {
-                NuevaLinea(fila, "equipos");
+                NuevaLinea(fila);
                 Mensaje = null;
             }
             else
@@ -474,9 +452,9 @@ namespace MC_Cables_0._1
             return Mensaje;
         }
 
-        public String NuevaLinea(DataGridViewRow fila, String Tabla)
+        public String NuevaLinea(DataGridViewRow fila)
         {
-            String Columna = "INSERT INTO " + Tabla + " (ProyectoID, ";
+            String Columna = "INSERT INTO equipos (ProyectoID, ";
             String Valores = "VALUES ('" + ProyectoID.ToString() + "', '";
             String NombreColumna = "";
 
@@ -529,6 +507,8 @@ namespace MC_Cables_0._1
             if(ID != 0)
             {
                 dgvEquipos.Rows[IndiceF].Cells["EquipoID"].Value = ID;
+                dgvEquipos.Rows[IndiceF].Cells["Modificada"].Value = "Modificada";
+                EnviarQuery(NuevaLinea(dgvEquipos.Rows[IndiceF]));
             }         
         }
 
@@ -553,118 +533,76 @@ namespace MC_Cables_0._1
             return ID;
         }
         
+        private void SicronizarLinea(DataGridViewRow fila)
+        {
 
+            try
+            {
+                using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
+                {   MySqlCommand sqlCmd = new MySqlCommand("", sqlConnection);
+                    sqlConnection.Open();
+
+                    if (fila.Cells["Modificada"].Value != null)
+                    {
+                        String aux = ArmadoQueryEquipo(fila);
+                        if (!String.IsNullOrEmpty(aux))
+                        {
+                            sqlCmd.CommandText = aux;
+                            sqlCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception exc) { MessageBox.Show(exc.Message); }
+        }
+
+        private void guardarDatosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult Res = new DialogResult();
+            Res = MessageBox.Show("Va sincronizar los cambios, reemplazando lo existente. ¿Esta Seguro?", "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (Res == DialogResult.Yes && CambioCelda == true)
+            {
+                SincronizarDB();
+                CambioCelda = false;
+
+                foreach (DataGridViewRow fila in dgvEquipos.Rows)
+                {
+                    //Insertar funcion para volver al color original la fila
+                }
+            }
+        }
+
+        private void eliminarFilaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult Res = new DialogResult();
+            String Query;
+            Res = MessageBox.Show("¿Esta seguro que desea eliminar los equipos seleccionados?", "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (Res == DialogResult.Yes)
+            {
+                foreach (DataGridViewRow Fila in dgvEquipos.Rows)
+                {
+                    if (Fila.Selected == true)
+                    {
+                        Query = "DELETE FROM Equipos WHERE EquipoID='";
+
+                        Query = Query + Fila.Cells["EquipoID"].Value.ToString() + "'";
+                        try
+                        {
+                            using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
+                            {
+                                MySqlCommand sqlCmd = new MySqlCommand(Query, sqlConnection);
+                                sqlConnection.Open();
+                                sqlCmd.ExecuteNonQuery();
+                                sqlConnection.Close();
+                            }
+                        }
+                        catch (Exception exc) { MessageBox.Show(exc.Message); }
+                    }
+                }
+                RecargarLista();
+            }
+        }
     }
 }
-
-
-
-/*
-Codigo de reserva
-
-    if (IndiceC == IP)
-                    {
-                        float Corriente = CalcularCorriente(dgvEquipos.Rows[e.RowIndex]);
-                        if (Corriente == 0)
-                        {
-                            dgvEquipos.Rows[IndiceF].Cells[II].Style.BackColor = Color.Yellow;
-                            dgvEquipos.Rows[IndiceF].Cells[II].Value = Corriente;
-                        }
-                    }
-
-
-                    if (IndiceC == II)
-                    {
-                        float Potencia = CalcularPotencia(dgvEquipos.Rows[e.RowIndex]);
-                        if (Potencia == 0)
-                        {
-                            dgvEquipos.Rows[IndiceF].Cells[IP].Style.BackColor = Color.Yellow;
-                            dgvEquipos.Rows[IndiceF].Cells[IP].Value = Potencia;
-                        }
-                    }
-
-
-
-
-                if (fila.Cells["TAG"].Value.ToString() != "")
-                    Mensaje += "TAG = '" + fila.Cells["TAG"].Value.ToString() + "'";
-                else
-                    Mensaje += ", TAG = NULL";
-
-                if (fila.Cells["Rev"].Value.ToString() != "")
-                    Mensaje += ", Rev = '" + fila.Cells["Rev"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Rev = NULL";
-
-                if (fila.Cells["Tipo"].Value.ToString() != "")
-                    Mensaje += ", Tipo = '" + fila.Cells["Tipo"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Tipo = NULL";
-
-                if (fila.Cells["CantidadFases"].Value.ToString() != "")
-                    Mensaje += ", CantidadFases = '" + fila.Cells["CantidadFases"].Value.ToString() + "'";
-                else
-                    Mensaje += ", CantidadFases = NULL";
-
-                if (fila.Cells["Tension"].Value.ToString() != "")
-                    Mensaje += ", Tension = '" + fila.Cells["Tension"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Tension = NULL";
-
-                if (fila.Cells["Cosfi"].Value.ToString() != "")
-                    Mensaje += ", Cosfi = '" + fila.Cells["Cosfi"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Cosfi = NULL";
-
-                if (fila.Cells["PotenciaActiva"].Value.ToString() != "")
-                    Mensaje += ", PotenciaActiva = '" + fila.Cells["PotenciaActiva"].Value.ToString() + "'";
-                else
-                    Mensaje += ", PotenciaActiva = NULL";
-
-                if (fila.Cells["CosfiArranque"].Value.ToString() != "")
-                    Mensaje += ", CosfiArranque = '" + fila.Cells["CosfiArranque"].Value.ToString() + "'";
-                else
-                    Mensaje += ", CosfiArranque = NULL";
-
-                if (fila.Cells["CorrienteArranque"].Value.ToString() != "")
-                    Mensaje += ", CorrienteArranque = '" + fila.Cells["CorrienteArranque"].Value.ToString() + "'";
-                else
-                    Mensaje += ", CorrienteArranque = NULL";
-
-                if (fila.Cells["Rendimiento"].Value.ToString() != "")
-                    Mensaje += ", Rendimiento = '" + fila.Cells["Rendimiento"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Rendimiento = NULL";
-
-                if (fila.Cells["Descripcion"].Value.ToString() != "")
-                    Mensaje += ", Descripcion = '" + fila.Cells["Descripcion"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Descripcion = NULL";
-
-                if (fila.Cells["Ubicacion"].Value.ToString() != "")
-                    Mensaje += ", Ubicacion = '" + fila.Cells["Ubicacion"].Value.ToString() + "'";
-                else
-                    Mensaje += ", Ubicacion = NULL";
-
-                if (fila.Cells["PID"].Value.ToString() != "")
-                    Mensaje += ", PID = '" + fila.Cells["PID"].Value.ToString() + "'";
-                else
-                    Mensaje += ", PID = NULL";
-
-
-                Mensaje += " WHERE EquipoID = " + fila.Cells["EquipoID"].Value.ToString();
-
-                //Reemplazo ',' por '.'
-                Mensaje = Mensaje.Replace(",", ".");
-                Mensaje = Mensaje.Replace("'. ", "', ");
-                Mensaje = Mensaje.Replace("NULL.", "NULL,");
-
-
-
-
-
-
-
-
-
-*/

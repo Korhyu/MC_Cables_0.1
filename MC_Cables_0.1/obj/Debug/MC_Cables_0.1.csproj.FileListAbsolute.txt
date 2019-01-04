@@ -121,3 +121,6 @@ D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\bin\Debug\System.Numerics.Vectors
 D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\obj\Debug\MC_Cables_0._1.fBalanceCargas.resources
+D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\obj\Debug\MC_Cables_0._1.fNuevaCarga.resources
+D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\obj\Debug\MC_Cables_0._1.fNuevoEscenario.resources
+D:\Programacion\C#\MC_Cables_0.1\MC_Cables_0.1\obj\Debug\MC_Cables_0._1.fMC_Cables.resources

@@ -38,8 +38,7 @@ namespace MC_Cables_0._1
                     listaUsr.Sort();
                     cbUsuario.DataSource = listaUsr;
                 
-
-
+                    
                     sqlCmd.CommandText = "SELECT NombreProyecto FROM proyectos";
                     sqlReader = sqlCmd.ExecuteReader();
 
@@ -87,6 +86,21 @@ namespace MC_Cables_0._1
             else
             {
                 fBalanceCargas frm = new fBalanceCargas(cbUsuario.Text, cbProyecto.Text);
+                frm.Owner = this;
+                frm.ShowDialog();
+                //this.Close();
+            }
+        }
+
+        private void btMCCables_Click(object sender, EventArgs e)
+        {
+            if (cbUsuario.Text == " -- Seleccionar Usuario -- " || cbProyecto.Text == " -- Seleccionar Proyecto -- ")
+            {
+                MessageBox.Show("Seleccione un Usuario y un Proyecto");
+            }
+            else
+            {
+                fMC_Cables frm = new fMC_Cables(cbUsuario.Text, cbProyecto.Text);
                 frm.Owner = this;
                 frm.ShowDialog();
                 //this.Close();

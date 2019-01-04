@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Equipo.cs" />
     <Compile Include="fBalanceCargas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,11 +88,29 @@
     <Compile Include="fEquipos.Designer.cs">
       <DependentUpon>fEquipos.cs</DependentUpon>
     </Compile>
+    <Compile Include="fNuevaCarga.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fNuevaCarga.Designer.cs">
+      <DependentUpon>fNuevaCarga.cs</DependentUpon>
+    </Compile>
+    <Compile Include="fNuevoEscenario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fNuevoEscenario.Designer.cs">
+      <DependentUpon>fNuevoEscenario.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogIn.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LogIn.Designer.cs">
       <DependentUpon>LogIn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="fMC_Cables.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fMC_Cables.Designer.cs">
+      <DependentUpon>fMC_Cables.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,8 +120,17 @@
     <EmbeddedResource Include="fEquipos.resx">
       <DependentUpon>fEquipos.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="fNuevaCarga.resx">
+      <DependentUpon>fNuevaCarga.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="fNuevoEscenario.resx">
+      <DependentUpon>fNuevoEscenario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogIn.resx">
       <DependentUpon>LogIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="fMC_Cables.resx">
+      <DependentUpon>fMC_Cables.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

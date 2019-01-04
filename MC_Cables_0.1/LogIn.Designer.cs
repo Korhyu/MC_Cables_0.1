@@ -38,13 +38,17 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btCargas = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btMCCables = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // cbUsuario
             // 
+            this.cbUsuario.DropDownHeight = 110;
+            this.cbUsuario.DropDownWidth = 400;
             this.cbUsuario.FormattingEnabled = true;
-            this.cbUsuario.Location = new System.Drawing.Point(49, 102);
+            this.cbUsuario.IntegralHeight = false;
+            this.cbUsuario.Location = new System.Drawing.Point(50, 100);
             this.cbUsuario.Name = "cbUsuario";
             this.cbUsuario.Size = new System.Drawing.Size(382, 21);
             this.cbUsuario.TabIndex = 0;
@@ -53,7 +57,7 @@
             // 
             this.btEquipos.Location = new System.Drawing.Point(49, 205);
             this.btEquipos.Name = "btEquipos";
-            this.btEquipos.Size = new System.Drawing.Size(110, 23);
+            this.btEquipos.Size = new System.Drawing.Size(120, 25);
             this.btEquipos.TabIndex = 2;
             this.btEquipos.Text = "Lista Equipos";
             this.btEquipos.UseVisualStyleBackColor = true;
@@ -61,8 +65,11 @@
             // 
             // cbProyecto
             // 
+            this.cbProyecto.DropDownHeight = 110;
+            this.cbProyecto.DropDownWidth = 400;
             this.cbProyecto.FormattingEnabled = true;
-            this.cbProyecto.Location = new System.Drawing.Point(49, 162);
+            this.cbProyecto.IntegralHeight = false;
+            this.cbProyecto.Location = new System.Drawing.Point(50, 165);
             this.cbProyecto.Name = "cbProyecto";
             this.cbProyecto.Size = new System.Drawing.Size(382, 21);
             this.cbProyecto.TabIndex = 1;
@@ -70,10 +77,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Black;
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(45, 79);
+            this.label1.Location = new System.Drawing.Point(45, 75);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 20);
             this.label1.TabIndex = 3;
@@ -82,10 +89,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Black;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(45, 139);
+            this.label2.Location = new System.Drawing.Point(45, 140);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 20);
             this.label2.TabIndex = 4;
@@ -93,7 +100,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(396, 393);
+            this.btnClose.Location = new System.Drawing.Point(413, 365);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
@@ -114,9 +121,9 @@
             // 
             // btCargas
             // 
-            this.btCargas.Location = new System.Drawing.Point(186, 203);
+            this.btCargas.Location = new System.Drawing.Point(180, 205);
             this.btCargas.Name = "btCargas";
-            this.btCargas.Size = new System.Drawing.Size(110, 23);
+            this.btCargas.Size = new System.Drawing.Size(120, 25);
             this.btCargas.TabIndex = 3;
             this.btCargas.Text = "Lista de Cargas";
             this.btCargas.UseVisualStyleBackColor = true;
@@ -135,12 +142,23 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
+            // btMCCables
+            // 
+            this.btMCCables.Location = new System.Drawing.Point(311, 205);
+            this.btMCCables.Name = "btMCCables";
+            this.btMCCables.Size = new System.Drawing.Size(120, 25);
+            this.btMCCables.TabIndex = 4;
+            this.btMCCables.Text = "MC Cables";
+            this.btMCCables.UseVisualStyleBackColor = true;
+            this.btMCCables.Click += new System.EventHandler(this.btMCCables_Click);
+            // 
             // LogIn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Desktop;
-            this.ClientSize = new System.Drawing.Size(483, 428);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.ClientSize = new System.Drawing.Size(500, 400);
+            this.Controls.Add(this.btMCCables);
             this.Controls.Add(this.btCargas);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnClose);
@@ -152,7 +170,9 @@
             this.Controls.Add(this.cbUsuario);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LogIn";
-            this.Text = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "Thor_LogIn";
+            this.Text = "LogIn";
             this.Load += new System.EventHandler(this.LogIn_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -171,6 +191,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btCargas;
+        private System.Windows.Forms.Button btMCCables;
     }
 }
 
