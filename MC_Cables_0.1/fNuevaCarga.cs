@@ -18,6 +18,7 @@ namespace MC_Cables_0._1
         String ProyectoID;
         String EscID;
         String EquipoID;
+        bool Cargado = false;
 
         
         public Equipo EquipoResultado = new Equipo();
@@ -92,6 +93,7 @@ namespace MC_Cables_0._1
 
         private void cbEquipos_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Cargado = true;
             ComboBox cb = sender as ComboBox;
 
             int Indice = cb.SelectedIndex;
@@ -133,28 +135,32 @@ namespace MC_Cables_0._1
 
         private void btSalir_Click(object sender, EventArgs e)
         {
-            DialogResult Res = new DialogResult();
-            Res = MessageBox.Show("¿Agregar equipo seleccionado?", "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (Res == DialogResult.Yes)
+            if (Cargado == true)
             {
-                String Query = NuevaLinea();
+                DialogResult Res = new DialogResult();
+                Res = MessageBox.Show("¿Agregar equipo seleccionado?", "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                try
+                if (Res == DialogResult.Yes)
                 {
-                    using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
-                    {
-                        MySqlCommand sqlCmd = new MySqlCommand(Query, sqlConnection);
-                        sqlConnection.Open();
-                        sqlCmd.ExecuteNonQuery();
-                        sqlConnection.Close();
-                    }
-                }
-                catch (Exception exc) { MessageBox.Show(exc.Message); }
+                    String Query = NuevaLinea();
 
-                fBalanceCargas aux = (fBalanceCargas)this.Owner;
-                aux.RecargarEscenario();
+                    try
+                    {
+                        using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
+                        {
+                            MySqlCommand sqlCmd = new MySqlCommand(Query, sqlConnection);
+                            sqlConnection.Open();
+                            sqlCmd.ExecuteNonQuery();
+                            sqlConnection.Close();
+                        }
+                    }
+                    catch (Exception exc) { MessageBox.Show(exc.Message); }
+
+                    fBalanceCargas aux = (fBalanceCargas)this.Owner;
+                    aux.RecargarEscenario();
+                }
             }
+            
             Close();
         }
 
@@ -176,6 +182,8 @@ namespace MC_Cables_0._1
 
             fBalanceCargas aux = (fBalanceCargas) this.Owner;
             aux.RecargarEscenario();
+            Cargado = false;
+            cbEquipos.Focus();
         }
 
         public String NuevaLinea()

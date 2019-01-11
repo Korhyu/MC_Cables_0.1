@@ -23,7 +23,7 @@ namespace MC_Cables_0._1
         bool CambioCelda = false;
         bool IndicarCambios = false;
         bool ModificandoCelda = false;
-
+        
         public fEquipos()
         {
             InitializeComponent();
@@ -437,11 +437,19 @@ namespace MC_Cables_0._1
                         {
                             if (dgvEquipos.Columns[celda.ColumnIndex].Name != "Aux")
                             {
+                                
+                                //Sincronizo solo lo modificado (Es un problema si antes habia un valor y ahora borre la celda porque no sincroniza)
                                 if (!String.IsNullOrEmpty(celda.Value.ToString()))
                                 {
                                     Mensaje += " " + dgvEquipos.Columns[celda.ColumnIndex].Name;
                                     Mensaje += " = '" + celda.Value.ToString().Replace(',', '.') + "', ";
                                 }
+                                
+                                /*
+                                 * Tengo que corregir el error de que si habia algo antes en la celda y lo borro para que sea 0
+                                 * Me sincronize igal la celda
+                                 */
+                                
                             }
                         }
                     }
@@ -604,5 +612,6 @@ namespace MC_Cables_0._1
                 RecargarLista();
             }
         }
+
     }
 }

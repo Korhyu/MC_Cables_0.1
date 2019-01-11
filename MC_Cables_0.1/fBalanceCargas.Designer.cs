@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fBalanceCargas));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -70,6 +71,8 @@
             this.lbTA = new System.Windows.Forms.Label();
             this.lbTR = new System.Windows.Forms.Label();
             this.lbTS = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.eliminarFilaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -82,6 +85,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCargas)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -296,6 +300,7 @@
             this.dgvCargas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvCargas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvCargas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCargas.ContextMenuStrip = this.contextMenuStrip1;
             this.dgvCargas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCargas.Location = new System.Drawing.Point(0, 0);
             this.dgvCargas.MinimumSize = new System.Drawing.Size(200, 100);
@@ -411,7 +416,7 @@
             // 
             this.lbPCA.AutoSize = true;
             this.lbPCA.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPCA.ForeColor = System.Drawing.Color.Silver;
+            this.lbPCA.ForeColor = System.Drawing.Color.White;
             this.lbPCA.Location = new System.Drawing.Point(279, 25);
             this.lbPCA.Name = "lbPCA";
             this.lbPCA.Size = new System.Drawing.Size(38, 16);
@@ -423,7 +428,7 @@
             // 
             this.lbPCR.AutoSize = true;
             this.lbPCR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPCR.ForeColor = System.Drawing.Color.Silver;
+            this.lbPCR.ForeColor = System.Drawing.Color.White;
             this.lbPCR.Location = new System.Drawing.Point(279, 50);
             this.lbPCR.Name = "lbPCR";
             this.lbPCR.Size = new System.Drawing.Size(39, 16);
@@ -435,7 +440,7 @@
             // 
             this.lbPCS.AutoSize = true;
             this.lbPCS.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPCS.ForeColor = System.Drawing.Color.Silver;
+            this.lbPCS.ForeColor = System.Drawing.Color.White;
             this.lbPCS.Location = new System.Drawing.Point(279, 75);
             this.lbPCS.Name = "lbPCS";
             this.lbPCS.Size = new System.Drawing.Size(38, 16);
@@ -447,7 +452,7 @@
             // 
             this.lbPIA.AutoSize = true;
             this.lbPIA.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPIA.ForeColor = System.Drawing.Color.Silver;
+            this.lbPIA.ForeColor = System.Drawing.Color.White;
             this.lbPIA.Location = new System.Drawing.Point(555, 25);
             this.lbPIA.Name = "lbPIA";
             this.lbPIA.Size = new System.Drawing.Size(32, 16);
@@ -459,7 +464,7 @@
             // 
             this.lbPIR.AutoSize = true;
             this.lbPIR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPIR.ForeColor = System.Drawing.Color.Silver;
+            this.lbPIR.ForeColor = System.Drawing.Color.White;
             this.lbPIR.Location = new System.Drawing.Point(555, 50);
             this.lbPIR.Name = "lbPIR";
             this.lbPIR.Size = new System.Drawing.Size(33, 16);
@@ -471,7 +476,7 @@
             // 
             this.lbPIS.AutoSize = true;
             this.lbPIS.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPIS.ForeColor = System.Drawing.Color.Silver;
+            this.lbPIS.ForeColor = System.Drawing.Color.White;
             this.lbPIS.Location = new System.Drawing.Point(555, 75);
             this.lbPIS.Name = "lbPIS";
             this.lbPIS.Size = new System.Drawing.Size(32, 16);
@@ -495,7 +500,7 @@
             // 
             this.lbPSA.AutoSize = true;
             this.lbPSA.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPSA.ForeColor = System.Drawing.Color.Silver;
+            this.lbPSA.ForeColor = System.Drawing.Color.White;
             this.lbPSA.Location = new System.Drawing.Point(831, 25);
             this.lbPSA.Name = "lbPSA";
             this.lbPSA.Size = new System.Drawing.Size(38, 16);
@@ -507,7 +512,7 @@
             // 
             this.lbPSR.AutoSize = true;
             this.lbPSR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPSR.ForeColor = System.Drawing.Color.Silver;
+            this.lbPSR.ForeColor = System.Drawing.Color.White;
             this.lbPSR.Location = new System.Drawing.Point(831, 50);
             this.lbPSR.Name = "lbPSR";
             this.lbPSR.Size = new System.Drawing.Size(39, 16);
@@ -519,7 +524,7 @@
             // 
             this.lbPSS.AutoSize = true;
             this.lbPSS.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPSS.ForeColor = System.Drawing.Color.Silver;
+            this.lbPSS.ForeColor = System.Drawing.Color.White;
             this.lbPSS.Location = new System.Drawing.Point(831, 75);
             this.lbPSS.Name = "lbPSS";
             this.lbPSS.Size = new System.Drawing.Size(38, 16);
@@ -543,7 +548,7 @@
             // 
             this.lbTA.AutoSize = true;
             this.lbTA.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTA.ForeColor = System.Drawing.Color.Silver;
+            this.lbTA.ForeColor = System.Drawing.Color.White;
             this.lbTA.Location = new System.Drawing.Point(1107, 25);
             this.lbTA.Name = "lbTA";
             this.lbTA.Size = new System.Drawing.Size(28, 16);
@@ -555,7 +560,7 @@
             // 
             this.lbTR.AutoSize = true;
             this.lbTR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTR.ForeColor = System.Drawing.Color.Silver;
+            this.lbTR.ForeColor = System.Drawing.Color.White;
             this.lbTR.Location = new System.Drawing.Point(1107, 50);
             this.lbTR.Name = "lbTR";
             this.lbTR.Size = new System.Drawing.Size(29, 16);
@@ -567,13 +572,27 @@
             // 
             this.lbTS.AutoSize = true;
             this.lbTS.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTS.ForeColor = System.Drawing.Color.Silver;
+            this.lbTS.ForeColor = System.Drawing.Color.White;
             this.lbTS.Location = new System.Drawing.Point(1107, 75);
             this.lbTS.Name = "lbTS";
             this.lbTS.Size = new System.Drawing.Size(28, 16);
             this.lbTS.TabIndex = 28;
             this.lbTS.Text = "TS";
             this.lbTS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eliminarFilaToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(139, 26);
+            // 
+            // eliminarFilaToolStripMenuItem
+            // 
+            this.eliminarFilaToolStripMenuItem.Name = "eliminarFilaToolStripMenuItem";
+            this.eliminarFilaToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.eliminarFilaToolStripMenuItem.Text = "Eliminar Fila";
+            this.eliminarFilaToolStripMenuItem.Click += new System.EventHandler(this.eliminarFilaToolStripMenuItem_Click);
             // 
             // fBalanceCargas
             // 
@@ -589,6 +608,8 @@
             this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "fBalanceCargas";
             this.Text = "fBalanceCargas";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fBalanceCargas_FormClosing);
+            this.Load += new System.EventHandler(this.fBalanceCargas_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -604,6 +625,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvCargas)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -651,5 +673,7 @@
         private System.Windows.Forms.Label lbTR;
         private System.Windows.Forms.Label lbTS;
         private System.Windows.Forms.ToolStripMenuItem eliminarCargaToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem eliminarFilaToolStripMenuItem;
     }
 }

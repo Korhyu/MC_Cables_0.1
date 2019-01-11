@@ -148,6 +148,7 @@ namespace MC_Cables_0._1
             dgvCargas.Columns["ProyectoID"].Visible = false;
             dgvCargas.Columns["EquipoID"].Visible = false;
             dgvCargas.Columns["EscenarioID"].Visible = false;
+            dgvCargas.Columns["FactorSimultaneidad"].Visible = false;
             dgvCargas.Columns["Modificada"].Visible = false;
             dgvCargas.Columns["UltimaModific"].Visible = false;
             dgvCargas.Columns["TipoOperacion"].Visible = false;
@@ -310,15 +311,15 @@ namespace MC_Cables_0._1
 
 
             //Verifico que esten todos los datos y realizo el calculo de la corriente
-            if (fila.Cells[IT].Value != DBNull.Value)
+            if (fila.Cells[IT].Value != null)
             {
-                if (fila.Cells[IP].Value != DBNull.Value)
+                if (fila.Cells[IP].Value != null)
                 {
-                    if (fila.Cells[IC].Value != DBNull.Value)
+                    if (fila.Cells[IC].Value != null)
                     {
-                        if (fila.Cells[IF].Value != DBNull.Value)
+                        if (fila.Cells[IF].Value != null)
                         {
-                            if (fila.Cells[IR].Value != DBNull.Value)
+                            if (fila.Cells[IR].Value != null)
                             {
                                 float k;
 
@@ -355,11 +356,11 @@ namespace MC_Cables_0._1
 
 
             //Verifico que esten todos los datos y realizo el calculo de la corriente
-            if (fila.Cells[IF].Value != DBNull.Value)
+            if (!String.IsNullOrEmpty(fila.Cells[IF].Value.ToString()))
             {
-                if (fila.Cells[IP].Value != DBNull.Value)
+                if (!String.IsNullOrEmpty(fila.Cells[IP].Value.ToString()))
                 {
-                    if (fila.Cells[IR].Value != DBNull.Value)
+                    if (!String.IsNullOrEmpty(fila.Cells[IR].Value.ToString()))
                     {
                         float Potencia = (float)fila.Cells[IP].Value;
                         float FactorC = (float)fila.Cells[IF].Value;
@@ -461,46 +462,61 @@ namespace MC_Cables_0._1
                 switch (Tipo)
                 {
                     case "Continua":
-                        //Potencia Activa Continua
-                        Potencias[0, 0] = Potencias[0, 0] + (float)Fila.Cells["PCons"].Value;
-                        //Potencia Reactiva Continua
-                        Potencias[1, 0] = Potencias[1, 0] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
-                        //Potencia Aparente Continua
-                        Potencias[2, 0] = Potencias[2, 0] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        if(Fila.Cells["PCons"].Value != null)
+                        {
+                            //Potencia Activa Continua
+                            Potencias[0, 0] = Potencias[0, 0] + (float)Fila.Cells["PCons"].Value;
+                            //Potencia Reactiva Continua
+                            Potencias[1, 0] = Potencias[1, 0] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
+                            //Potencia Aparente Continua
+                            Potencias[2, 0] = Potencias[2, 0] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        }
                         break;
                     case "Intermitente":
-                        //Potencia Activa Intermitente
-                        Potencias[0, 1] = Potencias[0, 1] + (float)Fila.Cells["PCons"].Value;
-                        //Potencia Reactiva Intermitente
-                        Potencias[1, 1] = Potencias[1, 1] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
-                        //Potencia Aparente Intermitente
-                        Potencias[2, 1] = Potencias[2, 1] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        if (Fila.Cells["PCons"].Value != null)
+                        {
+                            //Potencia Activa Intermitente
+                            Potencias[0, 1] = Potencias[0, 1] + (float)Fila.Cells["PCons"].Value;
+                            //Potencia Reactiva Intermitente
+                            Potencias[1, 1] = Potencias[1, 1] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
+                            //Potencia Aparente Intermitente
+                            Potencias[2, 1] = Potencias[2, 1] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        }
                         break;
                     /*
                     case "Reserva":
-                        //Potencia Activa Reserva
-                        Potencias[0, 2] = Potencias[0, 2] + (float)Fila.Cells["PCons"].Value;
-                        //Potencia Reactiva Reserva
-                        Potencias[1, 2] = Potencias[1, 2] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
-                        //Potencia Aparente Reserva
-                        Potencias[2, 2] = Potencias[2, 2] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        if (Fila.Cells["PCons"].Value != null)
+                        {
+                            //Potencia Activa Reserva
+                            Potencias[0, 2] = Potencias[0, 2] + (float)Fila.Cells["PCons"].Value;
+                            //Potencia Reactiva Reserva
+                            Potencias[1, 2] = Potencias[1, 2] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
+                            //Potencia Aparente Reserva
+                            Potencias[2, 2] = Potencias[2, 2] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        }
                         break;
                     */
                     case "Stand By":
-                        //Potencia Activa Stand By
-                        Potencias[0, 3] = Potencias[0, 3] + (float)Fila.Cells["PCons"].Value;
-                        //Potencia Reactiva Stand By
-                        Potencias[1, 3] = Potencias[1, 3] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
-                        //Potencia Aparente Stand By
-                        Potencias[2, 3] = Potencias[2, 3] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        if (Fila.Cells["PCons"].Value != null)
+                        {
+                            //Potencia Activa Stand By
+                            Potencias[0, 3] = Potencias[0, 3] + (float)Fila.Cells["PCons"].Value;
+                            //Potencia Reactiva Stand By
+                            Potencias[1, 3] = Potencias[1, 3] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
+                            //Potencia Aparente Stand By
+                            Potencias[2, 3] = Potencias[2, 3] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        }
                         break;
                     case "Otro":
-                        //Potencia Activa Otro
-                        Potencias[0, 4] = Potencias[0, 4] + (float)Fila.Cells["PCons"].Value;
-                        //Potencia Reactiva Otro
-                        Potencias[1, 4] = Potencias[1, 4] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
-                        //Potencia Aparente Otro
-                        Potencias[2, 4] = Potencias[2, 4] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        if (Fila.Cells["PCons"].Value != null)
+                        {
+                            //Potencia Activa Otro
+                            Potencias[0, 4] = Potencias[0, 4] + (float)Fila.Cells["PCons"].Value;
+                            //Potencia Reactiva Otro
+                            Potencias[1, 4] = Potencias[1, 4] + ((float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value) * (float)Math.Sin(Math.Acos((float)Fila.Cells["Cosfi"].Value));
+                            //Potencia Aparente Otro
+                            Potencias[2, 4] = Potencias[2, 4] + (float)Fila.Cells["PCons"].Value / (float)Fila.Cells["Cosfi"].Value;
+                        }
                         break;
                 }
             }
@@ -517,21 +533,21 @@ namespace MC_Cables_0._1
                 }
             }
 
-            lbPCA.Text = Potencias[0, 0].ToString("#.##");            //Indico Potencias Continuas
-            lbPCR.Text = Potencias[1, 0].ToString("#.##");
-            lbPCS.Text = Potencias[2, 0].ToString("#.##");
-            lbPIA.Text = Potencias[0, 1].ToString("#.##");            //Indico Potencias Intermitentes
-            lbPIR.Text = Potencias[1, 1].ToString("#.##");
-            lbPIS.Text = Potencias[2, 1].ToString("#.##");
-            //lbPRA.Text = Potencias[0, 2].ToString("#.##");            //Indico Potencias Reserva
-            //lbPRR.Text = Potencias[1, 2].ToString("#.##");
-            //lbPRS.Text = Potencias[2, 2].ToString("#.##");
-            lbPSA.Text = Potencias[0, 3].ToString("#.##");            //Indico Potencias Stand By
-            lbPSR.Text = Potencias[1, 3].ToString("#.##");
-            lbPSS.Text = Potencias[2, 3].ToString("#.##");
-            lbTA.Text = Potencias[0, 5].ToString("#.##");             //Indico Potencias Totales
-            lbTR.Text = Potencias[1, 5].ToString("#.##");
-            lbTS.Text = Potencias[2, 5].ToString("#.##");
+            lbPCA.Text = Potencias[0, 0].ToString("#.##") + " [kW]";            //Indico Potencias Continuas
+            lbPCR.Text = Potencias[1, 0].ToString("#.##") + " [kVAr]";
+            lbPCS.Text = Potencias[2, 0].ToString("#.##") + " [kVA]";
+            lbPIA.Text = Potencias[0, 1].ToString("#.##") + " [kW]";            //Indico Potencias Intermitentes
+            lbPIR.Text = Potencias[1, 1].ToString("#.##") + " [kVAr]";
+            lbPIS.Text = Potencias[2, 1].ToString("#.##") + " [kVA]";
+            //lbPRA.Text = Potencias[0, 2].ToString("#.##") + " [kW]";            //Indico Potencias Reserva
+            //lbPRR.Text = Potencias[1, 2].ToString("#.##") + " [kVAr]";
+            //lbPRS.Text = Potencias[2, 2].ToString("#.##") + " [kVA]";
+            lbPSA.Text = Potencias[0, 3].ToString("#.##") + " [kW]";            //Indico Potencias Stand By
+            lbPSR.Text = Potencias[1, 3].ToString("#.##") + " [kVAr]";
+            lbPSS.Text = Potencias[2, 3].ToString("#.##") + " [kVA]";
+            lbTA.Text = Potencias[0, 5].ToString("#.##") + " [kW]";             //Indico Potencias Totales
+            lbTR.Text = Potencias[1, 5].ToString("#.##") + " [kVAr]";
+            lbTS.Text = Potencias[2, 5].ToString("#.##") + " [kVA]";
 
         }
 
@@ -539,7 +555,7 @@ namespace MC_Cables_0._1
         {
             foreach (DataGridViewRow Fila in dgvCargas.Rows)
             {
-                if (Fila.Cells["Modificada"].Value != DBNull.Value)
+                if (Fila.Cells["Modificada"].Value != null)
                 {
                     //Si el ID no es null debo actualizar la base de datos
                     if (!String.IsNullOrEmpty(Fila.Cells["CargaID"].ToString()))
@@ -600,12 +616,16 @@ namespace MC_Cables_0._1
 
             if (!String.IsNullOrEmpty(fila.Cells["TipoOperacion"].Value.ToString()) )
                 Mensaje += "TipoOperacion = '" + fila.Cells["TipoOperacion"].Value.ToString() + "', ";
-/*
+            /*
             if (!String.IsNullOrEmpty(fila.Cells["Rendimiento"].Value.ToString()) )
                 Mensaje += "Rendimiento = '" + fila.Cells["Rendimiento"].Value.ToString() + "', ";
-*/
+
             if ( !String.IsNullOrEmpty(fila.Cells["UltimaModific"].Value.ToString()) )
                 Mensaje += "UltimaModific = '" + fila.Cells["UltimaModific"].Value.ToString() + "'  ";
+            */
+
+            //Agrego quien hizo la ultima modificacion
+            Mensaje += "UltimaModific = '" + NombreUsuario + " - " + DateTime.Now + "'  ";
 
             Mensaje = Mensaje.Remove(Mensaje.Length - 2);
             Mensaje += " WHERE CargaID = " + fila.Cells["CargaID"].Value.ToString() + ";";
@@ -660,6 +680,16 @@ namespace MC_Cables_0._1
 
         private void eliminarCargaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            EliminarFilas();
+        }
+
+        private void eliminarFilaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EliminarFilas();
+        }
+
+        private void EliminarFilas()
+        {
             DialogResult Res = new DialogResult();
             String Query;
             Res = MessageBox.Show("¿Esta seguro que desea eliminar las cargas seleccionadas?", "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -668,11 +698,11 @@ namespace MC_Cables_0._1
             {
                 foreach (DataGridViewRow Fila in dgvCargas.Rows)
                 {
-                    if(Fila.Selected == true)
+                    if (Fila.Selected == true)
                     {
                         Query = "DELETE FROM ListaCargas WHERE CargaID='";
 
-                        Query = Query + Fila.Cells["CargaID"].Value.ToString() +"'";
+                        Query = Query + Fila.Cells["CargaID"].Value.ToString() + "'";
                         try
                         {
                             using (MySqlConnection sqlConnection = new MySqlConnection(strConnection))
@@ -733,15 +763,17 @@ namespace MC_Cables_0._1
 
         private void eliminarEscenarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String Query = cbEscenario.Text;
-            String Aux = "¿Esta seguro que desea eliminar el escenario '" + Query + "'?";
+            String Query;
+            String Aux = "¿Esta seguro que desea eliminar el escenario '" + cbEscenario.Text + "'?";
             DialogResult Res = new DialogResult();
 
             Res = MessageBox.Show(Aux, "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (Res == DialogResult.Yes)
             {
-                Query = "DELETE FROM Escenarios WHERE NombreEscenario = '" + Query + "';";
+                Query = "DELETE FROM ListaCargas WHERE EscenarioID = '" + EscenarioID + "';";
+                EnviarQuery(Query);
+                Query = "DELETE FROM Escenarios WHERE NombreEscenario = '" + cbEscenario.Text + "';";
                 EnviarQuery(Query);
             }
             ListaEscenarios();
@@ -751,5 +783,25 @@ namespace MC_Cables_0._1
         {
 
         }
+
+        private void fBalanceCargas_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fBalanceCargas_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (CambioCelda == true)
+            {
+                DialogResult Res = new DialogResult();
+                Res = MessageBox.Show("Hay cambios sin guardar ¿Desea Guardarlos?", "¡Atención!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (Res == DialogResult.Yes)
+                {
+                    SincronizarDB();
+                }
+            }
+        }
+
     }
 }

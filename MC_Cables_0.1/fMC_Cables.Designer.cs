@@ -28,11 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dgvMC = new System.Windows.Forms.DataGridView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.lbProyecto = new System.Windows.Forms.Label();
             this.lbUsuario = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recalcularCorrientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comboBoxOrigenDestinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.eliminarCableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -42,22 +49,25 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvMC
             // 
             this.dgvMC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMC.ContextMenuStrip = this.contextMenuStrip1;
             this.dgvMC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMC.Location = new System.Drawing.Point(0, 0);
             this.dgvMC.Name = "dgvMC";
-            this.dgvMC.Size = new System.Drawing.Size(964, 583);
+            this.dgvMC.Size = new System.Drawing.Size(964, 559);
             this.dgvMC.TabIndex = 0;
-            this.dgvMC.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dgvMC.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMC_CellValueChanged);
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -68,7 +78,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvMC);
-            this.splitContainer1.Size = new System.Drawing.Size(964, 612);
+            this.splitContainer1.Size = new System.Drawing.Size(964, 588);
             this.splitContainer1.SplitterDistance = 25;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -116,6 +126,53 @@
             this.lbUsuario.Text = "Usuario:";
             this.lbUsuario.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.debugToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(964, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.recalcularCorrientesToolStripMenuItem,
+            this.comboBoxOrigenDestinoToolStripMenuItem});
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // recalcularCorrientesToolStripMenuItem
+            // 
+            this.recalcularCorrientesToolStripMenuItem.Name = "recalcularCorrientesToolStripMenuItem";
+            this.recalcularCorrientesToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.recalcularCorrientesToolStripMenuItem.Text = "RecalcularCorrientes";
+            this.recalcularCorrientesToolStripMenuItem.Click += new System.EventHandler(this.recalcularCorrientesToolStripMenuItem_Click);
+            // 
+            // comboBoxOrigenDestinoToolStripMenuItem
+            // 
+            this.comboBoxOrigenDestinoToolStripMenuItem.Name = "comboBoxOrigenDestinoToolStripMenuItem";
+            this.comboBoxOrigenDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.comboBoxOrigenDestinoToolStripMenuItem.Text = "ComboBoxOrigenDestino";
+            this.comboBoxOrigenDestinoToolStripMenuItem.Click += new System.EventHandler(this.comboBoxOrigenDestinoToolStripMenuItem_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eliminarCableToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(151, 26);
+            // 
+            // eliminarCableToolStripMenuItem
+            // 
+            this.eliminarCableToolStripMenuItem.Name = "eliminarCableToolStripMenuItem";
+            this.eliminarCableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.eliminarCableToolStripMenuItem.Text = "Eliminar Cable";
+            this.eliminarCableToolStripMenuItem.Click += new System.EventHandler(this.eliminarCableToolStripMenuItem_Click);
+            // 
             // fMC_Cables
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -123,8 +180,10 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.ClientSize = new System.Drawing.Size(964, 612);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.menuStrip1);
             this.Name = "fMC_Cables";
             this.Text = "MC_Cables";
+            this.Shown += new System.EventHandler(this.fMC_Cables_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMC)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -136,7 +195,11 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -147,5 +210,11 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Label lbProyecto;
         private System.Windows.Forms.Label lbUsuario;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem recalcularCorrientesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem comboBoxOrigenDestinoToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem eliminarCableToolStripMenuItem;
     }
 }

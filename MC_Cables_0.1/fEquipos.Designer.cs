@@ -178,7 +178,7 @@
             // eliminarFilaToolStripMenuItem
             // 
             this.eliminarFilaToolStripMenuItem.Name = "eliminarFilaToolStripMenuItem";
-            this.eliminarFilaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.eliminarFilaToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.eliminarFilaToolStripMenuItem.Text = "Eliminar Fila";
             this.eliminarFilaToolStripMenuItem.Click += new System.EventHandler(this.eliminarFilaToolStripMenuItem_Click);
             // 
